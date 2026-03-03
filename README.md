@@ -12,3 +12,5 @@ Learning how to create images using code.
 - DDA Algorithm
 - Transformations
 - Basic graphics concepts
+
+✨ Turning logic into visuals!
