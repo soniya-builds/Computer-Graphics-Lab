@@ -5,15 +5,15 @@
 void display() {
     glClearColor(1.0,1.0,1.0,1.0);
     glClear(GL_COLOR_BUFFER_BIT);
-    glPointSize(8.0);   // Slightly bigger dots
+    glPointSize(8.0);
 
     glBegin(GL_POINTS);
 
-    // Blue Dot
+    
     glColor3f(0.0, 0.0, 1.0);
     glVertex2f(0.1, 0.2);
 
-    // Purple Dot
+    
     glColor3f(0.6, 0.0, 0.8);
     glVertex2f(0.5, 0.3);
 
