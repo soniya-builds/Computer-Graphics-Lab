@@ -13,6 +13,7 @@ glColor3f (1.0, 1.0, 1.0);
 	glBegin(GL_QUADS); //Begin quadrilateral coordinates
 
 	//Trapezoid
+    glColor3f (1.0, 1.0, 1.0);
 	glVertex3f(0.05f, 0.05f, 0.0f);
 	glVertex3f(0.35f, 0.05f, 0.0f);
 	glVertex3f(0.40f, 0.35f, 0.0f);
