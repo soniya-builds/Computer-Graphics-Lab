@@ -91,5 +91,11 @@ int main(int argc, char **argv) {
 
   return 0;
 }
-//int xs = 100, ys = 100;
-//int xe = 400, ye = 300;
+//xs ys: 100 100
+//xe ye: 200 300
+
+//xs ys: 300 300
+//xe ye: 100 100
+
+//xs ys: 100 100
+//xe ye: 300 200
