@@ -2,7 +2,6 @@
 #include <GL/glut.h>
 #include <cmath>
 
-// Function to draw circle using integer center
 void drawCircle(int cx, int cy, int r) {
     glBegin(GL_LINE_LOOP);
     for (int i = 0; i < 100; i++) {
@@ -17,22 +16,20 @@ void drawCircle(int cx, int cy, int r) {
 void display() {
     glClear(GL_COLOR_BUFFER_BIT);
 
-    glColor3f(0.0, 0.6, 0.3); // green
+    glColor3f(0.0, 0.6, 0.3); 
 
-    // 🔺 Inverted Triangle (using int)
     int topY = 300;
 
     glBegin(GL_LINE_LOOP);
-        glVertex2i(200, topY);   // left top
-        glVertex2i(400, topY);   // right top
-        glVertex2i(300, 100);    // bottom
+        glVertex2i(200, topY);   
+        glVertex2i(400, topY);   
+        glVertex2i(300, 100);    
     glEnd();
 
-    // ⚪ Circle (touching triangle)
+    
     int radius = 50;
     int centerX = 300;
-    int centerY = topY + radius;  // ensures touching
-
+    int centerY = topY + radius;  
     drawCircle(centerX, centerY, radius);
 
     glFlush();
@@ -41,7 +38,7 @@ void display() {
 void init() {
     glClearColor(1,1,1,1);
     glMatrixMode(GL_PROJECTION);
-    gluOrtho2D(0, 640, 0, 480); // pixel coordinates
+    gluOrtho2D(0, 640, 0, 480); 
 }
 
 int main(int argc, char** argv) {
