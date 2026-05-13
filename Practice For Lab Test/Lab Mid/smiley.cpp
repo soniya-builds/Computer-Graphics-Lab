@@ -2,7 +2,6 @@
 #include <GL/glut.h>
 #include <cmath>
 
-// Draw circle
 void drawCircle(int cx, int cy, int r) {
     glBegin(GL_LINE_LOOP);
     for (int i = 0; i < 100; i++) {
@@ -17,16 +16,13 @@ void drawCircle(int cx, int cy, int r) {
 void display() {
     glClear(GL_COLOR_BUFFER_BIT);
 
-    glColor3f(0.0, 0.0, 0.0); // black
+    glColor3f(0.0, 0.0, 0.0);
 
-    // ⚪ Face
     drawCircle(320, 300, 100);
 
-    // 👁 Eyes
     drawCircle(280, 330, 10);
     drawCircle(360, 330, 10);
 
-    // 😊 Smile (using straight lines)
     glBegin(GL_LINE_STRIP);
         glVertex2i(260, 260);
         glVertex2i(300, 240);
