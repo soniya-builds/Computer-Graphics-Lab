@@ -4,11 +4,11 @@
 void display() {
     glClear(GL_COLOR_BUFFER_BIT);
 
-    glColor3f(0.0, 0.0, 0.0); // black
+    glColor3f(0.0, 0.0, 0.0); 
 
-    // ⭐ Star using lines
+ 
     glBegin(GL_LINE_LOOP);
-        glVertex2i(320, 400); // top
+        glVertex2i(320, 400); 
         glVertex2i(350, 300);
         glVertex2i(420, 300);
         glVertex2i(360, 250);
