@@ -3,13 +3,12 @@
 #include <iostream>
 using namespace std;
 
-// Global variables for input
 float xs, ys, xe, ye;
 
 void display() {
     glClear(GL_COLOR_BUFFER_BIT);
 
-    glColor3f(1.0, 0.4, 0.7); // Pink line
+    glColor3f(1.0, 0.4, 0.7); 
     glBegin(GL_POINTS);
 
     float dx = xe - xs;

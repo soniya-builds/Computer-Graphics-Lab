@@ -4,20 +4,18 @@
 void display() {
     glClear(GL_COLOR_BUFFER_BIT);
 
-    glColor3f(1.0, 0.4, 0.7); // Pink line
+    glColor3f(1.0, 0.4, 0.7); 
     glBegin(GL_POINTS);
 
-    // Starting point
     int x = 100, y = 300;
 
-    // Ending condition
     int xe = 400;
 
     while (x <= xe) {
         glVertex2i(x, y);
 
         x = x + 1;
-        y = y - 1;  // decrease y → slope = -1
+        y = y - 1; 
     }
 
     glEnd();

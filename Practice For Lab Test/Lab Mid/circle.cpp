@@ -1,11 +1,9 @@
 #include <windows.h>
 #include <GL/glut.h>
 
-// Center and radius (you can change)
 int cenX = 320, cenY = 240;
 int r = 100;
 
-// Function to plot 8 symmetric points
 void plotPoints(int x, int y) {
     glVertex2i(cenX + x, cenY + y);
     glVertex2i(cenX - x, cenY + y);
@@ -20,24 +18,21 @@ void plotPoints(int x, int y) {
 void display() {
     glClear(GL_COLOR_BUFFER_BIT);
 
-    glColor3f(1.0, 0.4, 0.7); // Pink circle
+    glColor3f(1.0, 0.4, 0.7); 
     glBegin(GL_POINTS);
 
     int x = 0;
     int y = r;
 
-    int p = 1 - r;   // Initial decision parameter
-
+    int p = 1 - r;   
     while (x <= y) {
         plotPoints(x, y);
 
         x = x + 1;
 
         if (p < 0) {
-            // Choose E pixel
             p = p + 2 * x + 1;
         } else {
-            // Choose SE pixel
             y = y - 1;
             p = p + 2 * x + 1 - 2 * y;
         }

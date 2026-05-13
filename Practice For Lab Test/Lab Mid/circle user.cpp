@@ -3,10 +3,8 @@
 #include <iostream>
 using namespace std;
 
-// Global variables
 int cenX, cenY, r;
 
-// Plot 8 symmetric points
 void plotPoints(int x, int y) {
     glVertex2i(cenX + x, cenY + y);
     glVertex2i(cenX - x, cenY + y);
@@ -21,13 +19,13 @@ void plotPoints(int x, int y) {
 void display() {
     glClear(GL_COLOR_BUFFER_BIT);
 
-    glColor3f(1.0, 0.4, 0.7); // Pink circle
+    glColor3f(1.0, 0.4, 0.7); 
     glBegin(GL_POINTS);
 
     int x = 0;
     int y = r;
 
-    int p = 1 - r;  // Initial decision parameter
+    int p = 1 - r;  
 
     while (x <= y) {
         plotPoints(x, y);
@@ -54,7 +52,6 @@ void init() {
 
 int main(int argc, char** argv) {
 
-    // 👉 User Input
     cout << "Enter center (cenX cenY): ";
     cin >> cenX >> cenY;
 

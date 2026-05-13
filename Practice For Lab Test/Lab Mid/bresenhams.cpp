@@ -7,7 +7,7 @@ int xe = 400, ye = 300;
 void display() {
     glClear(GL_COLOR_BUFFER_BIT);
 
-    glColor3f(1.0, 0.4, 0.7); // Pink line
+    glColor3f(1.0, 0.4, 0.7);
     glBegin(GL_POINTS);
 
     int dx = xe - xs;
@@ -20,7 +20,6 @@ void display() {
     if (abs(dy) < abs(dx)) {
 
         if (xs > xe) {
-            // swap points
             int temp;
             temp = xs; xs = xe; xe = temp;
             temp = ys; ys = ye; ye = temp;
@@ -49,7 +48,6 @@ void display() {
     else {
 
         if (ys > ye) {
-            // swap points
             int temp;
             temp = xs; xs = xe; xe = temp;
             temp = ys; ys = ye; ye = temp;

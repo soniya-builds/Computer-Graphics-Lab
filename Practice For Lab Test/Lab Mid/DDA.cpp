@@ -4,10 +4,9 @@
 void display() {
     glClear(GL_COLOR_BUFFER_BIT);
 
-    glColor3f(1.0, 0.4, 0.7); // Pink line
+    glColor3f(1.0, 0.4, 0.7); 
     glBegin(GL_POINTS);
 
-    // Input points (from PDF style)
     float xs = 100, ys = 100;
     float xe = 400, ye = 300;
 
@@ -41,7 +40,6 @@ void display() {
     // Case 2: m > 1
     else {
         if (ys > ye) {
-            // swap points
             float temp;
             temp = xs; xs = xe; xe = temp;
             temp = ys; ys = ye; ye = temp;

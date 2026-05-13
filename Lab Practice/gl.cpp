@@ -1,7 +1,7 @@
 #include <windows.h>
 #include <GL/glut.h>
 
-float x = -500;   // Starting position
+float x = -500;   
 
 void display()
 {
@@ -20,9 +20,8 @@ void display()
 
 void update(int value)
 {
-    x += 5;   // Move point
+    x += 5;   
 
-    // Restart after going out of screen
     if(x > 500)
     {
         x = -500;
@@ -30,7 +29,6 @@ void update(int value)
 
     glutPostRedisplay();
 
-    // Delay (milliseconds)
     glutTimerFunc(30, update, 0);
 }
 
