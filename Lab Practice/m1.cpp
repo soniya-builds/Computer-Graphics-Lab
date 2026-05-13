@@ -53,8 +53,6 @@ int main(int argc, char** argv)
 
     glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
 
-    // Standard window size
-
     glutInitWindowSize(640, 480);
 
     glutInitWindowPosition(100, 100);
