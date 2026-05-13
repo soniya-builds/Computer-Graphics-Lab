@@ -2,7 +2,6 @@
 #include <GL/glut.h>
 #include <cmath>
 
-// Draw circle
 void drawCircle(int cx, int cy, int r) {
     glBegin(GL_LINE_LOOP);
     for (int i = 0; i < 100; i++) {
@@ -19,7 +18,6 @@ void display() {
 
     glColor3f(0.6, 0.3, 0.1); // brown cone
 
-    // 🔺 Cone (triangle)
     int topY = 250;
 
     glBegin(GL_LINE_LOOP);
@@ -28,13 +26,12 @@ void display() {
         glVertex2i(320, 100);    // bottom
     glEnd();
 
-    // ⚪ Ice cream (circle touching cone)
-    glColor3f(1.0, 0.4, 0.7); // pink scoop
+    // Ice cream 
+    glColor3f(1.0, 0.4, 0.7); 
 
     int radius = 60;
     int centerX = 320;
-    int centerY = topY + radius;  // touching condition
-
+    int centerY = topY + radius;  
     drawCircle(centerX, centerY, radius);
 
     glFlush();
@@ -58,4 +55,3 @@ int main(int argc, char** argv) {
 
     return 0;
 }
-//same as before
