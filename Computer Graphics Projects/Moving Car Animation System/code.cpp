@@ -340,7 +340,7 @@ int main(int argc, char** argv)
 
     glutInitWindowSize(windowWidth, windowHeight);
 
-    glutCreateWindow("Advanced Sports Car Animation");
+    glutCreateWindow("Car Animation Project");
 
     init();
 
