@@ -89,7 +89,7 @@ void updateSnake() {
 
     for (int i = 0; i < NUM_SEGMENTS; i++) {
 
-        float segmentX = snakeOffsetX - i * 7.0f;
+        float segmentX = snakeOffsetX - i * 4.5f;
 
         float segmentY =
             BASE_Y +
@@ -119,20 +119,6 @@ void drawSnake() {
             snake[i].y,
             snake[i].radius,
             40
-        );
-    }
-
-    glColor3f(0.9f, 0.35f, 0.0f);
-
-    for (int i = NUM_SEGMENTS - 1; i >= 0; i--) {
-
-        float r = snake[i].radius * 0.55f;
-
-        drawCircle(
-            snake[i].x,
-            snake[i].y,
-            r,
-            25
         );
     }
 
