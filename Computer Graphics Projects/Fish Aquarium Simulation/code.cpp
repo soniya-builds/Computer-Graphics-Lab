@@ -67,9 +67,9 @@ void initEnvironment() {
         bubbles.push_back(b);
     }
 
-    Fish fish1 = {250.0f, 350.0f, 0.95f, 0.35f, 0.15f, 1.2f, 1.5f, true, 0.0f};
-    Fish fish2 = {550.0f, 330.0f, 0.95f, 0.75f, 0.15f, 1.0f, -1.2f, false, 3.14f};
-    
+    Fish fish1 = {250.0f, 350.0f, 1.0f, 0.1f, 0.1f, 1.2f, 1.5f, true, 0.0f};
+    Fish fish2 = {550.0f, 330.0f, 1.0f, 0.4f, 0.7f, 1.0f, -1.2f, false, 3.14f};
+
     fishes.push_back(fish1);
     fishes.push_back(fish2);
 }
@@ -128,25 +128,29 @@ void drawFishScene() {
     for (auto &f : fishes) {
         glPushMatrix();
         glTranslatef(f.x, f.y, 0.0f);
-        
+
         if (!f.movingRight) {
-            glScalef(-1.0f, 1.0f, 1.0f); 
+            glScalef(-1.0f, 1.0f, 1.0f);
         }
 
         float tailSway = sin(animationTime * 8.0f + f.tailPhase) * 15.0f;
+
         glPushMatrix();
         glTranslatef(-40.0f * f.scale, 0.0f, 0.0f);
         glRotatef(tailSway, 0.0f, 0.0f, 1.0f);
-        
-        glColor3f(f.r, f.g * 1.1f, f.b);
+
+        glColor3f(f.r, f.g * 0.9f, f.b);
+
         glBegin(GL_TRIANGLES);
         glVertex2f(0, 0);
         glVertex2f(-35.0f * f.scale, 25.0f * f.scale);
         glVertex2f(-35.0f * f.scale, -25.0f * f.scale);
         glEnd();
+
         glPopMatrix();
 
         glColor3f(f.r, f.g, f.b);
+
         glBegin(GL_POLYGON);
         for (int i = 0; i < 360; i += 10) {
             float rad = i * 3.14159f / 180.0f;
@@ -156,10 +160,12 @@ void drawFishScene() {
 
         glColor3f(1.0f, 1.0f, 1.0f);
         drawCircle(22.0f * f.scale, 8.0f * f.scale, 7.0f * f.scale, 12);
+
         glColor3f(0.05f, 0.1f, 0.15f);
         drawCircle(24.0f * f.scale, 8.0f * f.scale, 3.5f * f.scale, 12);
 
         glColor3f(f.r * 0.9f, f.g * 0.9f, f.b);
+
         glBegin(GL_TRIANGLES);
         glVertex2f(-5.0f * f.scale, -10.0f * f.scale);
         glVertex2f(-20.0f * f.scale, -30.0f * f.scale);
@@ -174,8 +180,9 @@ void display() {
     glClear(GL_COLOR_BUFFER_BIT);
 
     drawBackground();
-    
+
     glColor4f(1.0f, 1.0f, 1.0f, 0.5f);
+
     for (const auto &b : bubbles) {
         float dynamicX = b.x + sin(animationTime * b.wobbleSpeed) * b.wobbleAmplitude;
         drawCircle(dynamicX, b.y, b.radius, 12);
@@ -184,7 +191,7 @@ void display() {
     glColor3f(0.18f, 0.52f, 0.22f);
     drawPlantBlade(150, 70, 320, 18, 0.0f);
     drawPlantBlade(190, 70, 240, 14, 1.5f);
-    
+
     glColor3f(0.26f, 0.65f, 0.22f);
     drawPlantBlade(650, 70, 380, 20, 0.7f);
     drawPlantBlade(690, 70, 280, 15, 2.2f);
@@ -201,6 +208,7 @@ void update(int value) {
 
     for (auto &b : bubbles) {
         b.y += b.speed;
+
         if (b.y > 620) {
             b.y = -10;
             b.x = 150 + rand() % 500;
@@ -223,30 +231,39 @@ void update(int value) {
 
 void handleResize(int w, int h) {
     glViewport(0, 0, w, h);
+
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
+
     gluOrtho2D(0, 800, 0, 600);
+
     glMatrixMode(GL_MODELVIEW);
 }
 
 int main(int argc, char** argv) {
+
     glutInit(&argc, argv);
+
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
+
     glutInitWindowSize(800, 600);
     glutInitWindowPosition(100, 100);
+
     glutCreateWindow("Organic Fish Aquarium Simulation");
-    
+
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    
+
     initEnvironment();
-    
+
     glutDisplayFunc(display);
     glutReshapeFunc(handleResize);
+
     glutTimerFunc(16, update, 0);
-    
+
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+
     glutMainLoop();
+
     return 0;
 }
-
