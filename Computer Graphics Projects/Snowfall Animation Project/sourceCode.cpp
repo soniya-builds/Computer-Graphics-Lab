@@ -46,10 +46,10 @@ void drawTree() {
     // Tree trunk
     glColor3f(0.55f, 0.27f, 0.07f);
     glBegin(GL_QUADS);
-    glVertex2f(370, 120);
-    glVertex2f(430, 120);
-    glVertex2f(430, 250);
-    glVertex2f(370, 250);
+    glVertex2f(370, 100);
+    glVertex2f(430, 100);
+    glVertex2f(430, 230);
+    glVertex2f(370, 230);
     glEnd();
 
     // Tree layers
@@ -57,23 +57,23 @@ void drawTree() {
 
     // Bottom layer
     glBegin(GL_TRIANGLES);
-    glVertex2f(200, 250);
-    glVertex2f(600, 250);
-    glVertex2f(400, 500);
+    glVertex2f(200, 230);
+    glVertex2f(600, 230);
+    glVertex2f(400, 480);
     glEnd();
 
     // Middle layer
     glBegin(GL_TRIANGLES);
-    glVertex2f(250, 400);
-    glVertex2f(550, 400);
-    glVertex2f(400, 620);
+    glVertex2f(250, 380);
+    glVertex2f(550, 380);
+    glVertex2f(400, 600);
     glEnd();
 
     // Top layer
     glBegin(GL_TRIANGLES);
-    glVertex2f(300, 540);
-    glVertex2f(500, 540);
-    glVertex2f(400, 760);
+    glVertex2f(300, 520);
+    glVertex2f(500, 520);
+    glVertex2f(400, 740);
     glEnd();
 
     // Snow on layers
@@ -82,27 +82,27 @@ void drawTree() {
     glLineWidth(8);
 
     glBegin(GL_LINE_STRIP);
-    glVertex2f(220, 260);
-    glVertex2f(300, 240);
-    glVertex2f(400, 270);
-    glVertex2f(500, 240);
-    glVertex2f(580, 260);
+    glVertex2f(220, 240);
+    glVertex2f(300, 220);
+    glVertex2f(400, 250);
+    glVertex2f(500, 220);
+    glVertex2f(580, 240);
     glEnd();
 
     glBegin(GL_LINE_STRIP);
-    glVertex2f(270, 410);
-    glVertex2f(340, 390);
-    glVertex2f(400, 420);
-    glVertex2f(470, 390);
-    glVertex2f(530, 410);
+    glVertex2f(270, 390);
+    glVertex2f(340, 370);
+    glVertex2f(400, 400);
+    glVertex2f(470, 370);
+    glVertex2f(530, 390);
     glEnd();
 
     glBegin(GL_LINE_STRIP);
-    glVertex2f(320, 550);
-    glVertex2f(370, 530);
-    glVertex2f(400, 560);
-    glVertex2f(440, 530);
-    glVertex2f(480, 550);
+    glVertex2f(320, 530);
+    glVertex2f(370, 510);
+    glVertex2f(400, 540);
+    glVertex2f(440, 510);
+    glVertex2f(480, 530);
     glEnd();
 
     // Ground snow
