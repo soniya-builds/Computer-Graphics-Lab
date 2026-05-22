@@ -237,7 +237,7 @@ int main(int argc, char** argv)
     glutInitWindowSize(windowWidth,
                        windowHeight);
 
-    glutCreateWindow("Cute Emoji Analog Clock");
+    glutCreateWindow("Cute Analog Clock");
 
     init();
 
