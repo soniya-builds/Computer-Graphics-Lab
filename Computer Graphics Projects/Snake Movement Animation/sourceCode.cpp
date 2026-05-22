@@ -45,16 +45,7 @@ void drawHead(float x, float y) {
 
     glColor3f(0.85f, 0.0f, 0.0f);
 
-    glBegin(GL_POLYGON);
-
-    glVertex2f(x + 30, y);
-    glVertex2f(x + 12, y + 20);
-    glVertex2f(x - 15, y + 16);
-    glVertex2f(x - 28, y);
-    glVertex2f(x - 15, y - 16);
-    glVertex2f(x + 12, y - 20);
-
-    glEnd();
+    drawCircle(x, y, 18, 40);
 
     glColor3f(1.0f, 1.0f, 0.0f);
 
