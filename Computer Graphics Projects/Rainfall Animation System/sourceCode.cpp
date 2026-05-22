@@ -1,4 +1,5 @@
 #include <GL/glut.h>
+#include <GL/glu.h>
 #include <stdlib.h>
 #include <time.h>
 #include <cmath>
@@ -12,28 +13,33 @@ float rainSpeed[rainCount];
 bool lightning = false;
 int lightningTimer = 0;
 
-void initializeRain() {
-    for (int i = 0; i < rainCount; i++) {
+void initializeRain()
+{
+    for (int i = 0; i < rainCount; i++)
+    {
         rainX[i] = (rand() % 2000 - 1000) / 1000.0f;
         rainY[i] = (rand() % 2000) / 1000.0f;
         rainSpeed[i] = 0.008f + (rand() % 10) / 5000.0f;
     }
 }
 
-void drawCircle(float x, float y, float r) {
+void drawCircle(float x, float y, float r)
+{
     glBegin(GL_POLYGON);
 
-    for (int i = 0; i < 360; i++) {
+    for (int i = 0; i < 360; i++)
+    {
         float angle = i * 3.14159265f / 180.0f;
 
         glVertex2f(x + r * cos(angle),
-            y + r * sin(angle));
+                   y + r * sin(angle));
     }
 
     glEnd();
 }
 
-void drawCloud(float x, float y) {
+void drawCloud(float x, float y)
+{
     glColor3f(0.85f, 0.85f, 0.85f);
 
     drawCircle(x, y, 0.10f);
@@ -43,23 +49,27 @@ void drawCloud(float x, float y) {
     drawCircle(x + 0.16f, y - 0.04f, 0.10f);
 }
 
-void drawRain() {
+void drawRain()
+{
     glColor3f(0.65f, 0.85f, 1.0f);
 
     glLineWidth(2);
 
     glBegin(GL_LINES);
 
-    for (int i = 0; i < rainCount; i++) {
+    for (int i = 0; i < rainCount; i++)
+    {
         glVertex2f(rainX[i], rainY[i]);
+
         glVertex2f(rainX[i] - 0.015f,
-            rainY[i] - 0.05f);
+                   rainY[i] - 0.05f);
     }
 
     glEnd();
 }
 
-void drawLightning() {
+void drawLightning()
+{
     if (!lightning)
         return;
 
@@ -79,15 +89,18 @@ void drawLightning() {
     glEnd();
 }
 
-void display() {
+void display()
+{
     glClear(GL_COLOR_BUFFER_BIT);
 
     glLoadIdentity();
 
-    if (lightning) {
+    if (lightning)
+    {
         glColor3f(0.75f, 0.75f, 0.78f);
     }
-    else {
+    else
+    {
         glColor3f(0.20f, 0.20f, 0.28f);
     }
 
@@ -122,23 +135,30 @@ void display() {
     glutSwapBuffers();
 }
 
-void update(int value) {
-    for (int i = 0; i < rainCount; i++) {
+void update(int value)
+{
+    for (int i = 0; i < rainCount; i++)
+    {
         rainY[i] -= rainSpeed[i];
 
-        if (rainY[i] < -1.0f) {
+        if (rainY[i] < -1.0f)
+        {
             rainY[i] = 1.0f;
-            rainX[i] = (rand() % 2000 - 1000) / 1000.0f;
+
+            rainX[i] =
+                (rand() % 2000 - 1000) / 1000.0f;
         }
     }
 
     lightningTimer++;
 
-    if (lightningTimer > 150) {
+    if (lightningTimer > 150)
+    {
         lightning = true;
     }
 
-    if (lightningTimer > 160) {
+    if (lightningTimer > 160)
+    {
         lightning = false;
         lightningTimer = 0;
     }
@@ -148,7 +168,8 @@ void update(int value) {
     glutTimerFunc(16, update, 0);
 }
 
-void init() {
+void init()
+{
     srand(time(0));
 
     initializeRain();
@@ -160,10 +181,11 @@ void init() {
     glLoadIdentity();
 
     gluOrtho2D(-1.0, 1.0,
-        -1.0, 1.0);
+               -1.0, 1.0);
 }
 
-int main(int argc, char** argv) {
+int main(int argc, char** argv)
+{
     glutInit(&argc, argv);
 
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
