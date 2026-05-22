@@ -34,7 +34,7 @@ void drawText(const char* text, float x, float y)
 
 void drawClockFace()
 {
-    glColor3f(1.0f, 0.97f, 0.98f);
+    glColor3f(1.0f, 0.96f, 0.97f);
     drawCircle(0.75f);
 
     glColor3f(0.0f, 0.0f, 0.0f);
@@ -218,7 +218,7 @@ void update(int value)
 
 void init()
 {
-    glClearColor(1.0f, 0.95f, 0.97f, 1.0f);
+    glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 
     glMatrixMode(GL_PROJECTION);
 
