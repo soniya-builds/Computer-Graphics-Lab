@@ -5,11 +5,9 @@
 
 #define NUM_SNOWFLAKES 300
 
-// Window size
 int width = 800;
 int height = 800;
 
-// Snowflake structure
 struct Snowflake {
     float x, y;
     float speed;
@@ -18,7 +16,6 @@ struct Snowflake {
 
 Snowflake snow[NUM_SNOWFLAKES];
 
-// Initialize snowflakes
 void initSnow() {
     for (int i = 0; i < NUM_SNOWFLAKES; i++) {
         snow[i].x = rand() % width;
@@ -28,7 +25,6 @@ void initSnow() {
     }
 }
 
-// Draw circle for snowflakes
 void drawCircle(float cx, float cy, float r) {
     glBegin(GL_POLYGON);
     for (int i = 0; i < 100; i++) {
@@ -40,10 +36,8 @@ void drawCircle(float cx, float cy, float r) {
     glEnd();
 }
 
-// Draw snowy tree
 void drawTree() {
 
-    // Tree trunk
     glColor3f(0.55f, 0.27f, 0.07f);
     glBegin(GL_QUADS);
     glVertex2f(370, 100);
@@ -52,31 +46,26 @@ void drawTree() {
     glVertex2f(370, 230);
     glEnd();
 
-    // Tree layers
     glColor3f(0.0f, 0.5f, 0.3f);
 
-    // Bottom layer
     glBegin(GL_TRIANGLES);
     glVertex2f(200, 230);
     glVertex2f(600, 230);
     glVertex2f(400, 480);
     glEnd();
 
-    // Middle layer
     glBegin(GL_TRIANGLES);
     glVertex2f(250, 380);
     glVertex2f(550, 380);
     glVertex2f(400, 600);
     glEnd();
 
-    // Top layer
     glBegin(GL_TRIANGLES);
     glVertex2f(300, 520);
     glVertex2f(500, 520);
     glVertex2f(400, 740);
     glEnd();
 
-    // Snow on layers
     glColor3f(1.0f, 1.0f, 1.0f);
 
     glLineWidth(8);
@@ -105,7 +94,6 @@ void drawTree() {
     glVertex2f(480, 530);
     glEnd();
 
-    // Ground snow
     glBegin(GL_POLYGON);
     glVertex2f(0, 100);
     glVertex2f(800, 100);
@@ -114,16 +102,13 @@ void drawTree() {
     glEnd();
 }
 
-// Display function
 void display() {
 
-    // Background color
     glClearColor(0.65f, 0.75f, 0.8f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 
     drawTree();
 
-    // Draw snowflakes
     glColor3f(1, 1, 1);
 
     for (int i = 0; i < NUM_SNOWFLAKES; i++) {
@@ -133,7 +118,6 @@ void display() {
     glutSwapBuffers();
 }
 
-// Update snow animation
 void update(int value) {
 
     for (int i = 0; i < NUM_SNOWFLAKES; i++) {
@@ -141,13 +125,11 @@ void update(int value) {
         snow[i].y -= snow[i].speed;
         snow[i].x += snow[i].drift;
 
-        // Reset snowflake to top
         if (snow[i].y < 0) {
             snow[i].y = height;
             snow[i].x = rand() % width;
         }
 
-        // Keep inside screen
         if (snow[i].x < 0)
             snow[i].x = width;
 
@@ -156,16 +138,14 @@ void update(int value) {
     }
 
     glutPostRedisplay();
-    glutTimerFunc(16, update, 0); // ~60 FPS
+    glutTimerFunc(16, update, 0);
 }
 
-// Setup projection
 void init() {
     glMatrixMode(GL_PROJECTION);
     gluOrtho2D(0, width, 0, height);
 }
 
-// Main function
 int main(int argc, char** argv) {
 
     srand(time(0));
