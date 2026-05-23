@@ -83,15 +83,23 @@ void drawHead(float x, float y) {
 
     drawCircle(x, y, 18, 40);
 
+    glColor3f(1.0f, 0.6f, 0.8f);
+    drawCircle(x - 6, y - 8, 4, 30);
+    drawCircle(x - 6, y + 8, 4, 30);
+
     glColor3f(1.0f, 1.0f, 1.0f);
 
-    drawCircle(x + 6, y + 6, 4);
-    drawCircle(x + 6, y - 6, 4);
+    drawCircle(x + 6, y + 6, 4.5f);
+    drawCircle(x + 6, y - 6, 4.5f);
 
-    glColor3f(0.0f, 0.0f, 0.0f);
+    glColor3f(0.1f, 0.1f, 0.1f);
 
-    drawCircle(x + 7, y + 6, 2);
-    drawCircle(x + 7, y - 6, 2);
+    drawCircle(x + 7, y + 6, 2.5f);
+    drawCircle(x + 7, y - 6, 2.5f);
+
+    glColor3f(1.0f, 1.0f, 1.0f);
+    drawCircle(x + 8, y + 7, 0.8f);
+    drawCircle(x + 8, y - 5, 0.8f);
 
     glColor3f(1.0f, 0.0f, 0.0f);
 
@@ -131,11 +139,43 @@ void updateSnake() {
     }
 }
 
+void drawMandalaPattern(float cx, float cy, float r) {
+    if (r < 6.0f) return;
+
+    glColor3f(1.0f, 0.95f, 0.6f);
+    drawCircle(cx, cy, r * 0.85f, 16);
+
+    glColor3f(1.0f, 0.6f, 0.8f);
+    drawCircle(cx, cy, r * 0.70f, 16);
+
+    glColor3f(1.0f, 1.0f, 1.0f);
+    for (int j = 0; j < 8; j++) {
+        float angle = 2.0f * 3.1415926f * j / 8.0f;
+        float petX = cx + (r * 0.45f) * cos(angle);
+        float petY = cy + (r * 0.45f) * sin(angle);
+        drawCircle(petX, petY, r * 0.22f, 12);
+    }
+
+    glColor3f(0.85f, 0.1f, 0.5f);
+    for (int j = 0; j < 8; j++) {
+        float angle = 2.0f * 3.1415926f * j / 8.0f;
+        float petX = cx + (r * 0.45f) * cos(angle);
+        float petY = cy + (r * 0.45f) * sin(angle);
+        drawCircle(petX, petY, r * 0.12f, 12);
+    }
+
+    glColor3f(1.0f, 0.95f, 0.6f);
+    drawCircle(cx, cy, r * 0.28f, 12);
+
+    glColor3f(0.85f, 0.1f, 0.5f);
+    drawCircle(cx, cy, r * 0.14f, 12);
+}
+
 void drawSnake() {
 
-    glColor3f(1.0f, 0.4f, 0.7f);
-
     for (int i = NUM_SEGMENTS - 1; i >= 0; i--) {
+
+        glColor3f(1.0f, 0.4f, 0.7f);
 
         drawCircle(
             snake[i].x,
@@ -143,6 +183,14 @@ void drawSnake() {
             snake[i].radius,
             40
         );
+
+        if (i % 7 == 0 && i > 0) {
+            drawMandalaPattern(snake[i].x, snake[i].y, snake[i].radius);
+        } else if (i > 0) {
+            glColor3f(1.0f, 0.65f, 0.85f);
+            drawCircle(snake[i].x, snake[i].y + (snake[i].radius * 0.4f), snake[i].radius * 0.15f, 12);
+            drawCircle(snake[i].x, snake[i].y - (snake[i].radius * 0.4f), snake[i].radius * 0.15f, 12);
+        }
     }
 
     drawHead(snake[0].x, snake[0].y);
