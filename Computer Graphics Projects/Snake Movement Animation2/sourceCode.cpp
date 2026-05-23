@@ -88,20 +88,48 @@ void drawHead(float x, float y) {
     drawCircle(x - 6, y - 8, 4, 30);
     drawCircle(x - 6, y + 8, 4, 30);
 
-    glColor3f(1.0f, 1.0f, 1.0f);
+    bool blink =
+        (snakeOffsetX > WINDOW_WIDTH - 180 &&
+         snakeOffsetX < WINDOW_WIDTH - 120);
 
-    drawCircle(x + 6, y + 6, 4.5f);
-    drawCircle(x + 6, y - 6, 4.5f);
+    if (!blink) {
 
-    glColor3f(0.1f, 0.1f, 0.1f);
+        glColor3f(1.0f, 1.0f, 1.0f);
 
-    drawCircle(x + 7, y + 6, 2.5f);
-    drawCircle(x + 7, y - 6, 2.5f);
+        drawCircle(x + 6, y + 6, 4.5f);
+        drawCircle(x + 6, y - 6, 4.5f);
 
-    glColor3f(1.0f, 1.0f, 1.0f);
+        glColor3f(0.1f, 0.1f, 0.1f);
 
-    drawCircle(x + 8, y + 7, 0.8f);
-    drawCircle(x + 8, y - 5, 0.8f);
+        drawCircle(x + 7, y + 6, 2.5f);
+        drawCircle(x + 7, y - 6, 2.5f);
+
+        glColor3f(1.0f, 1.0f, 1.0f);
+
+        drawCircle(x + 8, y + 7, 0.8f);
+        drawCircle(x + 8, y - 5, 0.8f);
+    }
+    else {
+
+        glColor3f(1.0f, 1.0f, 1.0f);
+
+        drawCircle(x + 6, y + 6, 4.5f);
+
+        glColor3f(0.1f, 0.1f, 0.1f);
+
+        drawCircle(x + 7, y + 6, 2.5f);
+
+        glColor3f(0.2f, 0.0f, 0.1f);
+
+        glLineWidth(3);
+
+        glBegin(GL_LINES);
+
+        glVertex2f(x + 2, y - 6);
+        glVertex2f(x + 10, y - 6);
+
+        glEnd();
+    }
 
     glColor3f(1.0f, 0.0f, 0.0f);
 
@@ -298,7 +326,9 @@ int main(int argc, char** argv) {
 
     glutInitWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT);
 
-    glutCreateWindow("Snake Movement Animation");
+    glutInitWindowPosition(0, 50);
+
+    glutCreateWindow("Pink Snake Movement Animation");
 
     init();
 
