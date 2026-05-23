@@ -84,6 +84,7 @@ void drawHead(float x, float y) {
     drawCircle(x, y, 18, 40);
 
     glColor3f(1.0f, 0.6f, 0.8f);
+
     drawCircle(x - 6, y - 8, 4, 30);
     drawCircle(x - 6, y + 8, 4, 30);
 
@@ -98,6 +99,7 @@ void drawHead(float x, float y) {
     drawCircle(x + 7, y - 6, 2.5f);
 
     glColor3f(1.0f, 1.0f, 1.0f);
+
     drawCircle(x + 8, y + 7, 0.8f);
     drawCircle(x + 8, y - 5, 0.8f);
 
@@ -140,35 +142,41 @@ void updateSnake() {
 }
 
 void drawMandalaPattern(float cx, float cy, float r) {
-    if (r < 6.0f) return;
 
-    glColor3f(1.0f, 0.95f, 0.6f);
-    drawCircle(cx, cy, r * 0.85f, 16);
+    if (r < 6.0f)
+        return;
 
-    glColor3f(1.0f, 0.6f, 0.8f);
-    drawCircle(cx, cy, r * 0.70f, 16);
+    glColor3f(1.0f, 0.75f, 0.88f);
 
-    glColor3f(1.0f, 1.0f, 1.0f);
-    for (int j = 0; j < 8; j++) {
-        float angle = 2.0f * 3.1415926f * j / 8.0f;
-        float petX = cx + (r * 0.45f) * cos(angle);
-        float petY = cy + (r * 0.45f) * sin(angle);
-        drawCircle(petX, petY, r * 0.22f, 12);
-    }
+    drawCircle(cx, cy, r * 0.72f, 24);
 
     glColor3f(0.85f, 0.1f, 0.5f);
-    for (int j = 0; j < 8; j++) {
-        float angle = 2.0f * 3.1415926f * j / 8.0f;
-        float petX = cx + (r * 0.45f) * cos(angle);
-        float petY = cy + (r * 0.45f) * sin(angle);
-        drawCircle(petX, petY, r * 0.12f, 12);
+
+    for (int j = 0; j < 10; j++) {
+
+        float angle = 2.0f * 3.1415926f * j / 10.0f;
+
+        float petX = cx + (r * 0.42f) * cos(angle);
+        float petY = cy + (r * 0.42f) * sin(angle);
+
+        drawCircle(petX, petY, r * 0.16f, 18);
     }
 
-    glColor3f(1.0f, 0.95f, 0.6f);
-    drawCircle(cx, cy, r * 0.28f, 12);
+    glColor3f(1.0f, 0.92f, 0.96f);
 
-    glColor3f(0.85f, 0.1f, 0.5f);
-    drawCircle(cx, cy, r * 0.14f, 12);
+    for (int j = 0; j < 6; j++) {
+
+        float angle = 2.0f * 3.1415926f * j / 6.0f;
+
+        float petX = cx + (r * 0.24f) * cos(angle);
+        float petY = cy + (r * 0.24f) * sin(angle);
+
+        drawCircle(petX, petY, r * 0.10f, 16);
+    }
+
+    glColor3f(0.75f, 0.0f, 0.4f);
+
+    drawCircle(cx, cy, r * 0.14f, 20);
 }
 
 void drawSnake() {
@@ -185,11 +193,30 @@ void drawSnake() {
         );
 
         if (i % 7 == 0 && i > 0) {
-            drawMandalaPattern(snake[i].x, snake[i].y, snake[i].radius);
-        } else if (i > 0) {
-            glColor3f(1.0f, 0.65f, 0.85f);
-            drawCircle(snake[i].x, snake[i].y + (snake[i].radius * 0.4f), snake[i].radius * 0.15f, 12);
-            drawCircle(snake[i].x, snake[i].y - (snake[i].radius * 0.4f), snake[i].radius * 0.15f, 12);
+
+            drawMandalaPattern(
+                snake[i].x,
+                snake[i].y,
+                snake[i].radius
+            );
+        }
+        else if (i > 0) {
+
+            glColor3f(1.0f, 0.75f, 0.88f);
+
+            drawCircle(
+                snake[i].x,
+                snake[i].y + (snake[i].radius * 0.35f),
+                snake[i].radius * 0.12f,
+                12
+            );
+
+            drawCircle(
+                snake[i].x,
+                snake[i].y - (snake[i].radius * 0.35f),
+                snake[i].radius * 0.12f,
+                12
+            );
         }
     }
 
@@ -259,7 +286,7 @@ int main(int argc, char** argv) {
 
     glutInitWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT);
 
-    glutCreateWindow("Pink Snake Movement Animation");
+    glutCreateWindow("Snake Movement Animation");
 
     init();
 
