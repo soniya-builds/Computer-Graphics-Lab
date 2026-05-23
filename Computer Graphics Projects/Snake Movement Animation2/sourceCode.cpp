@@ -328,7 +328,7 @@ int main(int argc, char** argv) {
 
     glutInitWindowPosition(0, 50);
 
-    glutCreateWindow("Pink Snake Movement Animation");
+    glutCreateWindow("Snake Movement Animation");
 
     init();
 
