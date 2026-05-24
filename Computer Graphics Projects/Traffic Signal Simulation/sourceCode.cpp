@@ -1,15 +1,3 @@
-/**
- * Studio Ghibli Inspired Japanese Town Traffic Simulation
- * Fully Working Error-Free Version
- * Requires: FreeGLUT + OpenGL
- *
- * Compile (Linux):
- * g++ main.cpp -o app -lGL -lGLU -lglut
- *
- * Compile (Windows MinGW):
- * g++ main.cpp -o app -lfreeglut -lopengl32 -lglu32
- */
-
 #define _USE_MATH_DEFINES
 
 #include <GL/freeglut.h>
@@ -20,10 +8,6 @@
 
 using namespace std;
 
-// ============================================
-// WINDOW CONFIG
-// ============================================
-
 const int WINDOW_WIDTH  = 1280;
 const int WINDOW_HEIGHT = 720;
 
@@ -31,10 +15,6 @@ const float WORLD_LEFT   = -100.0f;
 const float WORLD_RIGHT  = 100.0f;
 const float WORLD_BOTTOM = -56.25f;
 const float WORLD_TOP    = 56.25f;
-
-// ============================================
-// BASIC STRUCTS
-// ============================================
 
 struct Vec2 {
     float x, y;
@@ -51,19 +31,11 @@ struct Color3 {
         : r(_r), g(_g), b(_b) {}
 };
 
-// ============================================
-// GLOBALS
-// ============================================
-
 float globalTime = 0.0f;
 float cameraPanX = 0.0f;
 float cameraZoom = 1.0f;
 
 bool isRainMode = true;
-
-// ============================================
-// TRAFFIC SYSTEM
-// ============================================
 
 enum TrafficState {
     TRAFFIC_GREEN,
@@ -74,10 +46,6 @@ enum TrafficState {
 TrafficState currentTrafficState = TRAFFIC_GREEN;
 int trafficTimer = 0;
 
-// ============================================
-// VEHICLES
-// ============================================
-
 struct Vehicle {
     Vec2 pos;
     float speed;
@@ -87,20 +55,12 @@ struct Vehicle {
 
 vector<Vehicle> cars;
 
-// ============================================
-// PARTICLES
-// ============================================
-
 struct RainDrop {
     Vec2 pos;
     float speed;
 };
 
 vector<RainDrop> rainParticles;
-
-// ============================================
-// DRAW HELPERS
-// ============================================
 
 void drawCircle(float cx, float cy, float r,
                 int segments,
@@ -145,10 +105,6 @@ void drawGradientRect(float x1, float y1,
     glEnd();
 }
 
-// ============================================
-// INITIALIZATION
-// ============================================
-
 void initSimulation()
 {
     srand((unsigned)time(NULL));
@@ -156,7 +112,6 @@ void initSimulation()
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    // Rain
     for (int i = 0; i < 200; i++) {
         RainDrop r;
 
@@ -167,7 +122,6 @@ void initSimulation()
         rainParticles.push_back(r);
     }
 
-    // Cars
     for (int i = 0; i < 5; i++) {
         Vehicle v;
 
@@ -184,10 +138,6 @@ void initSimulation()
         cars.push_back(v);
     }
 }
-
-// ============================================
-// SKY
-// ============================================
 
 void drawSky()
 {
@@ -213,10 +163,6 @@ void drawSky()
     );
 }
 
-// ============================================
-// ROAD
-// ============================================
-
 void drawRoad()
 {
     glColor3f(0.2f, 0.22f, 0.25f);
@@ -228,7 +174,6 @@ void drawRoad()
         8.0f
     );
 
-    // Lane divider
     glColor3f(0.95f, 0.8f, 0.2f);
 
     glLineWidth(3);
@@ -241,18 +186,12 @@ void drawRoad()
     glEnd();
 }
 
-// ============================================
-// TREES
-// ============================================
-
 void drawTree(float x, float y)
 {
-    // trunk
     glColor3f(0.3f, 0.2f, 0.1f);
 
     glRectf(x - 1.0f, y, x + 1.0f, y + 10.0f);
 
-    // leaves
     drawCircle(x, y + 14.0f, 6.0f, 20,
                Color3(0.2f, 0.5f, 0.3f));
 
@@ -263,10 +202,6 @@ void drawTree(float x, float y)
                Color3(0.25f, 0.55f, 0.35f));
 }
 
-// ============================================
-// BUILDINGS
-// ============================================
-
 void drawBuilding(float x, float y,
                   float w, float h)
 {
@@ -274,7 +209,6 @@ void drawBuilding(float x, float y,
 
     glRectf(x, y, x + w, y + h);
 
-    // roof
     glColor3f(0.25f, 0.25f, 0.3f);
 
     glBegin(GL_TRIANGLES);
@@ -285,7 +219,6 @@ void drawBuilding(float x, float y,
 
     glEnd();
 
-    // windows
     glColor3f(1.0f, 0.9f, 0.6f);
 
     for (float wx = x + 3; wx < x + w - 3; wx += 6) {
@@ -295,18 +228,23 @@ void drawBuilding(float x, float y,
     }
 }
 
-// ============================================
-// TRAFFIC LIGHT
-// ============================================
-
 void drawTrafficLight()
 {
-    float x = 20.0f;
-    float y = 10.0f;
+    float x = 30.0f;
+    float y = 8.0f;
+
+    glColor3f(0.35f, 0.35f, 0.35f);
+
+    glRectf(
+        x - 1.0f,
+        y,
+        x - 0.2f,
+        y + 20.0f
+    );
 
     glColor3f(0.2f, 0.2f, 0.2f);
 
-    glRectf(x, y, x + 3, y + 20);
+    glRectf(x, y + 10.0f, x + 3, y + 30.0f);
 
     Color3 red(0.4f, 0.0f, 0.0f);
     Color3 yellow(0.4f, 0.4f, 0.0f);
@@ -321,14 +259,10 @@ void drawTrafficLight()
     if (currentTrafficState == TRAFFIC_GREEN)
         green = Color3(0.0f, 1.0f, 0.0f);
 
-    drawCircle(x + 1.5f, y + 16, 1.2f, 20, red);
-    drawCircle(x + 1.5f, y + 11, 1.2f, 20, yellow);
-    drawCircle(x + 1.5f, y + 6, 1.2f, 20, green);
+    drawCircle(x + 1.5f, y + 26, 1.2f, 20, red);
+    drawCircle(x + 1.5f, y + 21, 1.2f, 20, yellow);
+    drawCircle(x + 1.5f, y + 16, 1.2f, 20, green);
 }
-
-// ============================================
-// VEHICLES
-// ============================================
 
 void drawVehicle(Vehicle &v)
 {
@@ -336,7 +270,6 @@ void drawVehicle(Vehicle &v)
 
     glTranslatef(v.pos.x, v.pos.y, 0);
 
-    // body
     glColor3f(v.color.r, v.color.g, v.color.b);
 
     glRectf(
@@ -346,7 +279,6 @@ void drawVehicle(Vehicle &v)
         4
     );
 
-    // top
     glColor3f(
         v.color.r * 0.8f,
         v.color.g * 0.8f,
@@ -360,7 +292,6 @@ void drawVehicle(Vehicle &v)
         7
     );
 
-    // wheels
     drawCircle(
         -v.length / 3,
         0,
@@ -380,10 +311,6 @@ void drawVehicle(Vehicle &v)
     glPopMatrix();
 }
 
-// ============================================
-// RAIN
-// ============================================
-
 void drawRain()
 {
     if (!isRainMode)
@@ -401,10 +328,6 @@ void drawRain()
     glEnd();
 }
 
-// ============================================
-// DRAW SCENE
-// ============================================
-
 void drawScene()
 {
     drawSky();
@@ -416,20 +339,16 @@ void drawScene()
 
     drawTree(-95, 8);
     drawTree(-35, 8);
-    drawTree(30, 8);
-    drawTree(85, 8);
 
     drawTrafficLight();
+
+    drawTree(85, 8);
 
     for (auto &v : cars)
         drawVehicle(v);
 
     drawRain();
 }
-
-// ============================================
-// UPDATE
-// ============================================
 
 void updateTraffic()
 {
@@ -498,7 +417,6 @@ void updateAnimation()
 
     cameraPanX = sinf(globalTime * 0.008f) * 2.0f;
 
-    // FIXED ERROR
     cameraZoom = 1.0f +
         (cosf(globalTime * 0.005f) * 0.02f);
 
@@ -506,10 +424,6 @@ void updateAnimation()
     updateCars();
     updateRain();
 }
-
-// ============================================
-// DISPLAY
-// ============================================
 
 void display()
 {
@@ -528,10 +442,6 @@ void display()
 
     glutSwapBuffers();
 }
-
-// ============================================
-// RESHAPE
-// ============================================
 
 void reshape(int w, int h)
 {
@@ -553,10 +463,6 @@ void reshape(int w, int h)
     glMatrixMode(GL_MODELVIEW);
 }
 
-// ============================================
-// TIMER
-// ============================================
-
 void timer(int value)
 {
     updateAnimation();
@@ -565,10 +471,6 @@ void timer(int value)
 
     glutTimerFunc(16, timer, 0);
 }
-
-// ============================================
-// KEYBOARD
-// ============================================
 
 void keyboard(unsigned char key,
               int x,
@@ -586,10 +488,6 @@ void keyboard(unsigned char key,
         break;
     }
 }
-
-// ============================================
-// MAIN
-// ============================================
 
 int main(int argc, char** argv)
 {
