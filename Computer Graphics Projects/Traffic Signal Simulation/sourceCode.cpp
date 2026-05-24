@@ -504,7 +504,7 @@ int main(int argc, char** argv)
     );
 
     glutCreateWindow(
-        "Studio Ghibli Japanese Town"
+        "Traffic Light Simulation"
     );
 
     initSimulation();
