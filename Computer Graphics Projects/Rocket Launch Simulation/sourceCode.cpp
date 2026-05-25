@@ -40,10 +40,10 @@ struct Particle {
     bool isSmoke;
 };
 
-LaunchState currentState = STATE_PAD;
+LaunchState currentState = STATE_COUNTDOWN;
 float rocketY = -30.0f;
 float rocketVelocity = 0.0f;
-float rocketAcceleration = 0.005f;
+float rocketAcceleration = 0.015f;
 int countdownTimer = 180; 
 float globalTime = 0.0f;
 float cameraShake = 0.0f;
@@ -82,29 +82,29 @@ void initSimulation() {
 
 void spawnPlumeParticle(float x, float y, bool heavyEngine) {
     Particle p;
-    float angle = (1.5f * M_PI) + (((rand() % 100) - 50) / 100.0f) * 0.35f;
-    float speed = heavyEngine ? (3.0f + (rand() % 100) / 30.0f) : (1.0f + (rand() % 100) / 50.0f);
+    float angle = (1.5f * M_PI) + (((rand() % 100) - 50) / 100.0f) * 0.45f;
+    float speed = heavyEngine ? (2.0f + (rand() % 100) / 40.0f) : (1.0f + (rand() % 100) / 60.0f);
     
-    p.pos.x = x + ((rand() % 100) - 50) / 40.0f;
+    p.pos.x = x + ((rand() % 100) - 50) / 30.0f;
     p.pos.y = y;
     p.vel.x = cosf(angle) * speed;
     p.vel.y = sinf(angle) * speed;
     
-    if ((rand() % 100) < 40) {
+    if ((rand() % 100) < 35) {
         p.isSmoke = false;
         p.color.r = 1.0f;
-        p.color.g = 0.3f + (rand() % 100) / 250.0f;
+        p.color.g = 0.4f + (rand() % 100) / 200.0f;
         p.color.b = 0.0f;
-        p.size = 2.0f + (rand() % 100) / 50.0f;
-        p.maxLife = 20.0f + rand() % 20;
+        p.size = 2.5f + (rand() % 100) / 40.0f;
+        p.maxLife = 15.0f + rand() % 15;
     } else {
         p.isSmoke = true;
-        float grey = 0.2f + (rand() % 100) / 330.0f;
-        p.color.r = grey;
+        float grey = 0.3f + (rand() % 100) / 300.0f;
+        p.color.r = grey + 0.1f;
         p.color.g = grey;
         p.color.b = grey;
-        p.size = 3.0f + (rand() % 100) / 250.0f;
-        p.maxLife = 40.0f + rand() % 40;
+        p.size = 3.5f + (rand() % 100) / 150.0f;
+        p.maxLife = 50.0f + rand() % 40;
     }
     
     p.life = p.maxLife;
@@ -217,10 +217,10 @@ void updateSimulation() {
         rocketVelocity += rocketAcceleration;
         rocketY += rocketVelocity;
         
-        cameraShake = 1.2f / (1.0f + (rocketY + 30.0f) * 0.02f);
-        if (cameraShake < 0.1f) cameraShake = 0.1f;
+        cameraShake = 1.5f / (1.0f + (rocketY + 30.0f) * 0.015f);
+        if (cameraShake < 0.15f) cameraShake = 0.15f;
         
-        for (int i = 0; i < 12; i++) {
+        for (int i = 0; i < 15; i++) {
             spawnPlumeParticle(-2.4f, rocketY - 2.5f, false);
             spawnPlumeParticle(2.4f, rocketY - 2.5f, false);
             spawnPlumeParticle(0.0f, rocketY - 1.8f, true);
@@ -229,7 +229,8 @@ void updateSimulation() {
         if (rocketY > WORLD_TOP + 40.0f) {
             rocketY = -30.0f;
             rocketVelocity = 0.0f;
-            currentState = STATE_PAD;
+            countdownTimer = 180;
+            currentState = STATE_COUNTDOWN;
         }
     }
     
@@ -242,13 +243,13 @@ void updateSimulation() {
         it->alpha = ageRatio;
         
         if (it->isSmoke) {
-            it->size += 0.15f;
-            it->vel.x *= 0.96f;
-            it->vel.y *= 0.96f;
-            it->vel.y += 0.01f; 
+            it->size += 0.25f;
+            it->vel.x *= 0.95f;
+            it->vel.y *= 0.95f;
+            it->vel.y += 0.015f; 
         } else {
-            it->size *= 0.95f;
-            it->color.g *= 0.92f; 
+            it->size *= 0.93f;
+            it->color.g *= 0.90f; 
         }
         
         if (it->life <= 0.0f || it->alpha <= 0.0f) {
@@ -292,10 +293,6 @@ void timer(int value) {
 }
 
 void keyboard(unsigned char key, int x, int y) {
-    if (key == 32 && currentState == STATE_PAD) {
-        currentState = STATE_COUNTDOWN;
-        countdownTimer = 180;
-    }
     if (key == 27) {
         exit(0);
     }
