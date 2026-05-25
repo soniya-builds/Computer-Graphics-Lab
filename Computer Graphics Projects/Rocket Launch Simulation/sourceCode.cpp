@@ -15,7 +15,7 @@ const float WORLD_RIGHT = 100.0f;
 const float WORLD_BOTTOM = -56.25f;
 const float WORLD_TOP = 56.25f;
 
-enum LaunchState { STATE_PAD, STATE_COUNTDOWN, STATE_IGNITION, STATE_ASCENT };
+enum LaunchState { STATE_COUNTDOWN, STATE_IGNITION, STATE_ASCENT, STATE_CLEARING };
 
 struct Vec2 {
     float x, y;
@@ -150,6 +150,8 @@ void drawLaunchPad() {
 }
 
 void drawRocket(float y) {
+    if (currentState == STATE_CLEARING) return;
+
     glPushMatrix();
     glTranslatef(0.0f, y, 0.0f);
     
@@ -227,6 +229,13 @@ void updateSimulation() {
         }
         
         if (rocketY > WORLD_TOP + 40.0f) {
+            currentState = STATE_CLEARING;
+        }
+    }
+
+    if (currentState == STATE_CLEARING) {
+        cameraShake = 0.0f;
+        if (particles.empty()) {
             rocketY = -30.0f;
             rocketVelocity = 0.0f;
             countdownTimer = 180;
