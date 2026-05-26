@@ -1,294 +1,198 @@
-#include <GL/freeglut.h>
+#include <GL/glut.h>
 #include <vector>
-#include <cmath>
-#include <ctime>
 #include <cstdlib>
+#include <ctime>
+#include <cmath>
 
-using namespace std;
+#ifndef M_PI
+#define M_PI 3.14159265358979323846
+#endif
 
-const int WIDTH = 1400;
-const int HEIGHT = 900;
-
-struct Particle
-{
+struct Particle {
     float x, y;
-    float dx, dy;
-    float r, g, b;
-    float life;
+    float vx, vy;
+    float r, g, b, alpha;
     float size;
 };
 
-struct Firework
-{
-    vector<Particle> particles;
+struct Rocket {
+    float x, y;
+    float vy;
+    float r, g, b;
+    bool exploded;
+    float explodeHeight;
 };
 
-vector<Firework> fireworks;
+struct BackgroundStar {
+    float x, y, size, brightness, twinkleSpeed;
+};
 
-float twinkle = 0.0f;
+std::vector<Particle> particles;
+std::vector<Rocket> rockets;
+std::vector<BackgroundStar> bgStars;
+const int NUM_BG_STARS = 150;
 
-void drawCircle(float x, float y, float radius)
-{
-    glBegin(GL_POLYGON);
-
-    for (int i = 0; i < 360; i++)
-    {
-        float angle = i * 3.1416f / 180.0f;
-
-        glVertex2f(
-            x + cos(angle) * radius,
-            y + sin(angle) * radius);
-    }
-
-    glEnd();
+void spawnRocket() {
+    Rocket r;
+    r.x = (rand() % 1600 - 800) / 1000.0f;
+    r.y = -1.0f;
+    r.vy = (rand() % 30 + 35) / 1000.0f;
+    r.exploded = false;
+    r.explodeHeight = (rand() % 1000 - 200) / 1000.0f;
+    
+    int colorScheme = rand() % 4;
+    if (colorScheme == 0) { r.r = 1.0f; r.g = 0.3f; r.b = 0.3f; }
+    else if (colorScheme == 1) { r.r = 0.3f; r.g = 1.0f; r.b = 0.4f; }
+    else if (colorScheme == 2) { r.r = 0.3f; r.g = 0.6f; r.b = 1.0f; }
+    else { r.r = 1.0f; r.g = 0.8f; r.b = 0.2f; }
+    
+    rockets.push_back(r);
 }
 
-void drawSky()
-{
-    glBegin(GL_QUADS);
-
-    glColor3f(0.01f, 0.01f, 0.08f);
-    glVertex2f(0, HEIGHT);
-
-    glVertex2f(WIDTH, HEIGHT);
-
-    glColor3f(0.05f, 0.02f, 0.12f);
-    glVertex2f(WIDTH, 0);
-
-    glVertex2f(0, 0);
-
-    glEnd();
-}
-
-void drawStars()
-{
-    for (int i = 0; i < 200; i++)
-    {
-        float x = (i * 137) % WIDTH;
-        float y = (i * 97) % HEIGHT;
-
-        float glow =
-            0.5f +
-            sin(twinkle + i) * 0.5f;
-
-        glColor3f(glow, glow, glow);
-
-        drawCircle(x, y, 1.5f);
-    }
-}
-
-void drawGround()
-{
-    glColor3f(0.03f, 0.08f, 0.03f);
-
-    glBegin(GL_QUADS);
-
-    glVertex2f(0, 0);
-    glVertex2f(WIDTH, 0);
-    glVertex2f(WIDTH, 120);
-    glVertex2f(0, 120);
-
-    glEnd();
-}
-
-void createFirework()
-{
-    Firework fw;
-
-    float centerX = 150 + rand() % (WIDTH - 300);
-    float centerY = 300 + rand() % 450;
-
-    float baseR = (rand() % 100) / 100.0f;
-    float baseG = (rand() % 100) / 100.0f;
-    float baseB = (rand() % 100) / 100.0f;
-
-    int count = 120;
-
-    for (int i = 0; i < count; i++)
-    {
-        float angle =
-            (2.0f * 3.1416f * i) / count;
-
-        float speed =
-            2.0f + (rand() % 50) / 10.0f;
-
+void explode(float cx, float cy, float r, float g, float b) {
+    int numParticles = rand() % 100 + 150;
+    for (int i = 0; i < numParticles; ++i) {
         Particle p;
-
-        p.x = centerX;
-        p.y = centerY;
-
-        p.dx = cos(angle) * speed;
-        p.dy = sin(angle) * speed;
-
-        p.r = baseR;
-        p.g = baseG;
-        p.b = baseB;
-
-        p.life = 1.0f;
-
-        p.size = 2 + rand() % 3;
-
-        fw.particles.push_back(p);
-    }
-
-    fireworks.push_back(fw);
-}
-
-void updateFireworks()
-{
-    if (rand() % 20 == 0)
-    {
-        createFirework();
-    }
-
-    for (size_t i = 0; i < fireworks.size(); i++)
-    {
-        for (size_t j = 0;
-             j < fireworks[i].particles.size();
-             j++)
-        {
-            Particle &p =
-                fireworks[i].particles[j];
-
-            p.x += p.dx;
-            p.y += p.dy;
-
-            p.dy -= 0.02f;
-
-            p.life -= 0.01f;
-        }
-    }
-
-    for (size_t i = 0; i < fireworks.size();)
-    {
-        bool alive = false;
-
-        for (size_t j = 0;
-             j < fireworks[i].particles.size();
-             j++)
-        {
-            if (fireworks[i].particles[j].life > 0)
-            {
-                alive = true;
-                break;
-            }
-        }
-
-        if (!alive)
-        {
-            fireworks.erase(
-                fireworks.begin() + i);
-        }
-        else
-        {
-            i++;
-        }
+        p.x = cx;
+        p.y = cy;
+        
+        float angle = (rand() % 3600) * M_PI / 1800.0f;
+        float speed = (rand() % 100 + 20) / 10000.0f;
+        
+        p.vx = cos(angle) * speed;
+        p.vy = sin(angle) * speed;
+        
+        p.r = r + ((rand() % 40 - 20) / 100.0f);
+        p.g = g + ((rand() % 40 - 20) / 100.0f);
+        p.b = b + ((rand() % 40 - 20) / 100.0f);
+        p.alpha = 1.0f;
+        p.size = (rand() % 25 + 15) / 10.0f;
+        
+        particles.push_back(p);
     }
 }
 
-void drawFireworks()
-{
-    for (size_t i = 0; i < fireworks.size(); i++)
-    {
-        for (size_t j = 0;
-             j < fireworks[i].particles.size();
-             j++)
-        {
-            Particle &p =
-                fireworks[i].particles[j];
+void init() {
+    glClearColor(0.04f, 0.04f, 0.12f, 1.0f);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glEnable(GL_POINT_SMOOTH);
+    
+    for (int i = 0; i < NUM_BG_STARS; ++i) {
+        BackgroundStar s;
+        s.x = (rand() % 2000 - 1000) / 1000.0f;
+        s.y = (rand() % 2000 - 1000) / 1000.0f;
+        s.size = (rand() % 20 + 5) / 10.0f;
+        s.brightness = (rand() % 100) / 100.0f;
+        s.twinkleSpeed = (rand() % 40 + 10) / 1000.0f;
+        bgStars.push_back(s);
+    }
+    
+    spawnRocket();
+}
 
-            if (p.life <= 0)
-                continue;
+void drawBackground() {
+    glBegin(GL_QUADS);
+    glColor3f(0.01f, 0.01f, 0.05f); glVertex2f(-1.0f, 1.0f);
+    glColor3f(0.01f, 0.01f, 0.05f); glVertex2f(1.0f, 1.0f);
+    glColor3f(0.06f, 0.06f, 0.20f); glVertex2f(1.0f, -1.0f);
+    glColor3f(0.06f, 0.06f, 0.20f); glVertex2f(-1.0f, -1.0f);
+    glEnd();
 
-            glColor4f(
-                p.r,
-                p.g,
-                p.b,
-                p.life);
-
-            drawCircle(
-                p.x,
-                p.y,
-                p.size);
-
-            glColor4f(
-                p.r,
-                p.g,
-                p.b,
-                p.life * 0.2f);
-
-            drawCircle(
-                p.x,
-                p.y,
-                p.size * 3);
+    for (auto &s : bgStars) {
+        s.brightness += s.twinkleSpeed;
+        if (s.brightness > 1.0f || s.brightness < 0.2f) {
+            s.twinkleSpeed = -s.twinkleSpeed;
         }
+        glPointSize(s.size);
+        glBegin(GL_POINTS);
+        glColor4f(1.0f, 1.0f, 1.0f, s.brightness);
+        glVertex2f(s.x, s.y);
+        glEnd();
     }
 }
 
-void display()
-{
+void display() {
     glClear(GL_COLOR_BUFFER_BIT);
+    
+    drawBackground();
 
-    glLoadIdentity();
+    for (const auto &r : rockets) {
+        if (!r.exploded) {
+            glPointSize(4.0f);
+            glBegin(GL_POINTS);
+            glColor4f(1.0f, 1.0f, 0.9f, 1.0f);
+            glVertex2f(r.x, r.y);
+            glEnd();
+            
+            glLineWidth(2.0f);
+            glBegin(GL_LINES);
+            glColor4f(r.r, r.g, r.b, 0.6f); glVertex2f(r.x, r.y);
+            glColor4f(r.r, r.g, r.b, 0.0f); glVertex2f(r.x, r.y - 0.05f);
+            glEnd();
+        }
+    }
 
-    drawSky();
-
-    drawStars();
-
-    drawGround();
-
-    drawFireworks();
+    for (const auto &p : particles) {
+        glPointSize(p.size);
+        glBegin(GL_POINTS);
+        glColor4f(p.r, p.g, p.b, p.alpha);
+        glVertex2f(p.x, p.y);
+        glEnd();
+    }
 
     glutSwapBuffers();
 }
 
-void update(int value)
-{
-    twinkle += 0.03f;
+void update(int value) {
+    if (rand() % 45 == 0 && rockets.size() < 4) {
+        spawnRocket();
+    }
 
-    updateFireworks();
+    for (size_t i = 0; i < rockets.size();) {
+        if (!rockets[i].exploded) {
+            rockets[i].y += rockets[i].vy;
+            if (rockets[i].y >= rockets[i].explodeHeight) {
+                explode(rockets[i].x, rockets[i].y, rockets[i].r, rockets[i].g, rockets[i].b);
+                rockets[i].exploded = true;
+            }
+            ++i;
+        } else {
+            rockets.erase(rockets.begin() + i);
+        }
+    }
+
+    for (size_t i = 0; i < particles.size();) {
+        particles[i].x += particles[i].vx;
+        particles[i].y += particles[i].vy;
+        particles[i].vy -= 0.00015f; 
+        particles[i].vx *= 0.985f;    
+        particles[i].vy *= 0.985f;    
+        particles[i].alpha -= 0.012f; 
+
+        if (particles[i].alpha <= 0.0f) {
+            particles.erase(particles.begin() + i);
+        } else {
+            ++i;
+        }
+    }
 
     glutPostRedisplay();
-
     glutTimerFunc(16, update, 0);
 }
 
-void init()
-{
-    glClearColor(0, 0, 0, 1);
-
-    glMatrixMode(GL_PROJECTION);
-
-    glLoadIdentity();
-
-    gluOrtho2D(0, WIDTH, 0, HEIGHT);
-
-    glEnable(GL_BLEND);
-
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-}
-
-int main(int argc, char **argv)
-{
-    srand(time(0));
-
+int main(int argc, char** argv) {
     glutInit(&argc, argv);
-
-    glutInitDisplayMode(
-        GLUT_DOUBLE | GLUT_RGBA);
-
-    glutInitWindowSize(WIDTH, HEIGHT);
-
-    glutCreateWindow(
-        "Fireworks Animation System");
-
+    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA);
+    glutInitWindowSize(800, 600);
+    glutCreateWindow("Dreamy Fireworks System");
+    
+    srand(time(0));
     init();
-
+    
     glutDisplayFunc(display);
-
-    glutTimerFunc(0, update, 0);
-
+    glutTimerFunc(16, update, 0);
+    
     glutMainLoop();
-
     return 0;
 }
