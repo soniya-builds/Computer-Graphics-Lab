@@ -174,7 +174,7 @@ int main(int argc, char** argv) {
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA);
     glutInitWindowSize(800, 600);
-    glutCreateWindow("Dreamy Ghibli Shooting Stars");
+    glutCreateWindow("Shooting Stars");
     
     srand(time(0));
     init();
