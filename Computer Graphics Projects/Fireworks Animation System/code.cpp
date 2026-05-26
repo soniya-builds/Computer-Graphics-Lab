@@ -185,7 +185,7 @@ int main(int argc, char** argv) {
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA);
     glutInitWindowSize(800, 600);
-    glutCreateWindow("Fireworks System");
+    glutCreateWindow("Fireworks Animation System");
     
     srand(time(0));
     init();
